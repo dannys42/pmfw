@@ -11,6 +11,7 @@ Source: %{name}-%{version}.tar.gz
 Group: System Environment/Daemons
 Packager: Danny Sung <danny@dannysung.com>
 BuildArch: noarch
+Requires: bind-utils
 
 %description
 This is simple poorman's "web" knocker.  It helps maintain your firewall rules,
