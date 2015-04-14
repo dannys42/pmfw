@@ -1,0 +1,7 @@
+#!/bin/sh
+tmpwatch -m 1 /var/spool/webknock/
+
+if [ -x /usr/sbin/pmfw-deploy ]; then
+    /usr/sbin/pmfw-deploy --cron
+fi
+

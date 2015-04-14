@@ -7,15 +7,23 @@ allow_ping=1
 allow_http=0
 allow_https=0
 allow_ntp=1
+allow_webknock=1
+allow_cron=0
 default_logging=1
 
 if [ -r /etc/webknock/webknock.conf ]; then
     . /etc/webknock/webknock.conf
 fi
 
+PMFW_DIR=/etc/pmfw
 dry_run=0
 while [ $# -gt 0 ]; do
     case "$1" in 
+        --cron)
+            if [ "$allow_cron" -ne 1 ]; then
+                exit
+            fi
+            ;;
         -n|--dry-run)
             dry_run=1
             ;;
@@ -78,7 +86,7 @@ EOF
 fi
 
 # Hard-coded addresses to allow
-if [ -f /etc/webknock/hosts.allow ]; then
+if [ -f ${PMFW_DIR}/hosts.allow ]; then
     while read allow_name; do
     allow_name=$(echo "$allow_name" | sed 's/#.*//g')
     if [ ! -z "$allow_name" ]; then
@@ -88,22 +96,22 @@ cat << EOF >> "${TMPFILE}"
 EOF
     fi
     unset allow_ip
-    done < /etc/webknock/hosts.allow
+    done < ${PMFW_DIR}/hosts.allow
 fi
 
 
 # Check our poorman's webknock
+if [ "$allow_webknock" -eq 1 -a -x ${PMFW_DIR}/webknock.rules ]; then
 shopt -s nullglob
 for file_ip in /var/spool/webknock/*; do
     ip=$(basename $file_ip)
     if [ ! -z "$ip" ]; then
-cat << EOF >> "${TMPFILE}"
--A in_pub_tcp -p tcp -m tcp --dport 22 -s "$ip" -j ACCEPT
--A in_pub_tcp -p tcp -m tcp --dport 115 -s "$ip" -j ACCEPT
--A in_pub_tcp -p tcp -m tcp --dport 873 -s "$ip" -j ACCEPT
-EOF
+        export ip
+        export iface_internet
+        ${PMFW_DIR}/webknock.rules >> "${TMPFILE}"
     fi
 done
+fi
 
 if [ "$allow_ntp" -eq 1 ]; then
 cat << EOF >> "${TMPFILE}"
@@ -129,8 +137,8 @@ COMMIT
 EOF
 fi
 
-if [ -r /etc/webknock/custom.rules ]; then
-    cat /etc/webknock/custom.rules >> "${TMPFILE}"
+if [ -r ${PMFW_DIR}/custom.rules ]; then
+    cat ${PMFW_DIR}/custom.rules >> "${TMPFILE}"
 fi
 
 if [ "$dry_run" -eq 1 ]; then

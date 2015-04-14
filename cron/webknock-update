@@ -1,7 +1,0 @@
-#!/bin/sh
-tmpwatch -m 1 /var/spool/webknock/
-
-if [ -x /usr/sbin/firewall-deploy ]; then
-    /usr/sbin/firewall-deploy
-fi
-

@@ -1,0 +1,17 @@
+#!/bin/sh
+# This script is called for every host found in /var/spool/webknock/ when allow_webknock is enabled
+# Customize the output as you see fit.
+#
+# variables provided:
+#   ip  - the IP address to be allowed
+#   iface_internet - the internet-facing interface
+#
+# Available rule chains:
+#   in_pub_tcp   - TCP packets coming in from the internet-facing interface
+#   in_pub_udp   - UDP packets coming in from the internet-facing interface
+#   in_pub_icmp  - ICMP packets coming in from the internet-facing interface
+#
+
+cat << EOF
+-A in_pub_tcp -p tcp -m tcp --dport 22 -s "$ip" -j ACCEPT
+EOF
