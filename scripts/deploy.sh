@@ -80,10 +80,13 @@ fi
 # Hard-coded addresses to allow
 if [ -f /etc/webknock/hosts.allow ]; then
     while read allow_name; do
-    allow_ip=$(host -t A "${allow_name}" | cut -d' ' -f 4)
+    allow_name=$(echo "$allow_name" | sed 's/#.*//g')
+    if [ ! -z "$allow_name" ]; then
+        allow_ip=$(host -t A "${allow_name}" | cut -d' ' -f 4)
 cat << EOF >> "${TMPFILE}"
 -A in_pub_tcp -p tcp -m tcp --dport 22 -s "$allow_ip" -j ACCEPT
 EOF
+    fi
     unset allow_ip
     done < /etc/webknock/hosts.allow
 fi
