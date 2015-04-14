@@ -1,7 +1,14 @@
 <?php
 /*
 
-This file can be relocated to any web accessible directory.  Be sure you update your /etc/sudoers.d/webknock file appropriately. 
+This file should be relocated to any web accessible directory.  Be sure you update your /etc/sudoers.d/webknock file appropriately. 
+
+If using HAProxy, ensure your /etc/haproxy/haproxy.cfg contains something like this:
+
+        backend www
+            timeout server 30s
+            option forwardfor header X-HAProxy-Client-IP
+            server www1 127.0.0.1:80
 
 */
 ?>

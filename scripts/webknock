@@ -1,0 +1,53 @@
+#!/bin/sh
+
+function usage()
+{
+    cat << EOF
+Usage: $0 [options] hostkey1 hostkey2 ...
+
+Options:
+    -h, --help         This help screen
+    -n, --dryrun       Print results, but don't do anything
+
+This will lookup your host with the given hostkey in ~/.webknock.  It will then run CURL 
+
+You must have a ~/.webknock file for this script to work.  It should be in the following format:
+    key,http://hostname/path
+
+EOF
+}
+
+dryrun=0
+
+if [ ! -e ${HOME}/.webknock ]; then
+    usage
+    exit 1
+fi
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 1
+            ;;
+        -n|--dryrun)
+            dryrun=1
+            ;;
+        *)
+            h="$1"
+            p=$(awk -F, "\$1 == \"$h\" { print \$2 }" ${HOME}/.webknock)
+            if [ -z "$p" ]; then
+                echo "ERROR: Could not find key '$h' in ~/.webknock" >&2
+            else
+                if [ "$dryrun" -eq 1 ]; then
+                    echo "curl --connect-timeout 2 ${p}"
+                else
+                    curl --connect-timeout 2 "${p}"
+                fi
+            fi
+
+            ;;
+    esac
+    shift
+done
+
