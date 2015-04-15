@@ -28,7 +28,7 @@ Your IP is: <?php print $ClientIP;?><br/>
 <?php
 if( !empty($ClientIP) ) {
     touch("/var/spool/webknock/$ClientIP");
-    system("sudo /etc/cron.hourly/webknock");
+    system("sudo /usr/sbin/pmfw-deploy");
 }
 ?>
 
