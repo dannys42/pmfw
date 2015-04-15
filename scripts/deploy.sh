@@ -11,11 +11,12 @@ allow_webknock=1
 allow_cron=0
 default_logging=1
 
-if [ -r /etc/webknock/webknock.conf ]; then
-    . /etc/webknock/webknock.conf
+PMFW_DIR=/etc/pmfw
+
+if [ -r ${PMFW_DIR}/pmfw.conf ]; then
+    . ${PMFW_DIR}/pmfw.conf
 fi
 
-PMFW_DIR=/etc/pmfw
 dry_run=0
 while [ $# -gt 0 ]; do
     case "$1" in 
@@ -45,7 +46,7 @@ done
 
 IPTABLES_RESTORE=/sbin/iptables-restore
 
-TMPFILE=/tmp/temp.webknock.$$
+TMPFILE=/tmp/temp.pmfw$$
 umask 066
 
 cat << EOF > "${TMPFILE}"
@@ -142,10 +143,8 @@ if [ -r ${PMFW_DIR}/custom.rules ]; then
 fi
 
 if [ "$dry_run" -eq 1 ]; then
-    echo "** dry run"
     cat "${TMPFILE}"
 else
-    echo "** nodry run"
     cat "${TMPFILE}" | ${IPTABLES_RESTORE}
 fi
 rm -f "${TMPFILE}"

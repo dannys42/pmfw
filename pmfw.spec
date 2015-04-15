@@ -62,6 +62,7 @@ make DESTDIR=${RPM_BUILD_ROOT} install
 
 %files webknock-server
 /var/lib/pmfw/default-webknock.php
+%config /etc/pmfw/webknock.rules
 %attr(0755,apache,apache) /var/spool/webknock/
 
 %files webknock-client
