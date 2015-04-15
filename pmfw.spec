@@ -11,7 +11,7 @@ Source: %{name}-%{version}.tar.gz
 Group: System Environment/Daemons
 Packager: Danny Sung <danny@dannysung.com>
 BuildArch: noarch
-Requires: bind-utils
+Requires: bind-utils, tmpwatch
 
 %description
 This is simple poorman's firewall rule manager.  It's a set of scripts that helps aid in configuraable/extensible firewall rules.
@@ -57,7 +57,7 @@ make DESTDIR=${RPM_BUILD_ROOT} install
 %config /etc/pmfw/hosts.allow
 %config /etc/sudoers.d/pmfw
 %config	/etc/pmfw/pmfw.conf
-/usr/sbin/*
+%attr(0755,-,-) /usr/sbin/pmfw-deploy
 /etc/cron.hourly/*
 
 %files webknock-server
