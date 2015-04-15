@@ -46,7 +46,7 @@ done
 
 IPTABLES_RESTORE=/sbin/iptables-restore
 
-TMPFILE=/tmp/temp.pmfw$$
+TMPFILE=/tmp/temp.pmfw.$$
 umask 066
 
 cat << EOF > "${TMPFILE}"
