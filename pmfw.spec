@@ -35,6 +35,8 @@ Copy the file from /var/lib/pmfw/default-webknock.php to your website like: /var
 
 Now you can use the webknock-client to send a webknock to this host.
 
+Note: "requiretty" must not be enabled in your /etc/sudoers file.
+
 %prep
 %setup -n %{name}
 
