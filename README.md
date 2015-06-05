@@ -50,7 +50,7 @@ allow_cron=0
 This configures eth0 as the primary internet interface.  And it allows Ping and NTP packets.  It also allows webknocking to work.  (more on that below).
 
 
-/etc/pmfw/webknock.rules: Webknock.rules is a schell script that will be
+/etc/pmfw/webknock.rules: Webknock.rules is a shell script that will be
 executed.  Any output given will be included in the final generated rule set.
 This is a script allowing you to create any complexity of conditions you want.
 By default, this just allows ssh for the given IP:
@@ -58,6 +58,16 @@ By default, this just allows ssh for the given IP:
 -A in_pub_tcp -p tcp -m tcp --dport 22 -s "$ip" -j ACCEPT
 </pre>
 
+## Installation ##
+
+Once configured, you can execute @pmfw-deploy --dry-run@.  This will print out
+the iptables rules for you to verify.  
+
+@pmfw-deploy@ will implement the rules.
+
+Once you've verified the rules are correct, you should set @allow_cron=1@ in
+the /etc/pmfw/pmfw.conf file, especially when using webknocking.  This will
+ensure that the the rules will be re-implemented every hour.
 
 ## WebKnock Client ##
 
