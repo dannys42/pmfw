@@ -11,6 +11,7 @@ install:
 	install -m640 etc/pmfw.conf $(DESTDIR)/etc/pmfw/
 	install -m750 etc/webknock.rules $(DESTDIR)/etc/pmfw/
 	install -d -m 0700 $(DESTDIR)/var/spool/webknock/
+	install -d -m 0755 $(DESTDIR)/var/lib/pmfw/default-webknock.php
 	install -m644 webknock-server/webknock.php $(DESTDIR)/var/lib/pmfw/default-webknock.php
 	install -m755 cron/pmfw-update $(DESTDIR)/etc/cron.hourly/
 	install -m755 webknock-client/webknock $(DESTDIR)/usr/bin/
