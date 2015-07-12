@@ -60,6 +60,9 @@ cat << EOF > "${TMPFILE}"
 :in_pub_tcp - 
 :in_pub_udp - 
 -A INPUT -i lo -j ACCEPT
+# conntrack is better, but it looks like these two lines are identical.
+# See http://unix.stackexchange.com/questions/108169/what-is-the-difference-between-m-conntrack-ctstate-and-m-state-state
+#-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i ${iface_internet} -p tcp -j in_pub_tcp
 -A INPUT -i ${iface_internet} -p udp -j in_pub_udp
