@@ -1,5 +1,5 @@
 %define name		pmfw
-%define version		0.1
+%define version		0.2
 %define release		1
 
 Summary: A simple poorman's firewall rule manager
