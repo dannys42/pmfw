@@ -1,1 +1,4 @@
 # Add your own custom iptables rules here.  Note that this must be in iptables-save format.
+# For exmpale, the following line will enable TCP port 8000:
+#    -A in_pub_tcp -p tcp -m tcp --dport 8000 -j ACCEPT
+# Built-in chains include: in_pub_tcp, in_pub_udp, in_pub_icmp
