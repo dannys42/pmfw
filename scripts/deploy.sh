@@ -123,6 +123,11 @@ cat << EOF >> "${TMPFILE}"
 EOF
 fi
 
+# Add any custom rules
+if [ -r ${PMFW_DIR}/custom.rules ]; then
+    cat ${PMFW_DIR}/custom.rules | sed '/^#/d' >> "${TMPFILE}"
+fi
+
 if [ "$default_logging" -eq 1 ]; then
 # Now add all the drop rules
 cat << EOF >> "${TMPFILE}"
@@ -138,10 +143,6 @@ cat << EOF >> "${TMPFILE}"
 -A in_pub_icmp -p icmp -m limit --limit 3/min --limit-burst 3 -j LOG --log-prefix "IPT drop ICMP: " --log-level 7
 -A in_pub_icmp -p icmp -j DROP
 EOF
-fi
-
-if [ -r ${PMFW_DIR}/custom.rules ]; then
-    cat ${PMFW_DIR}/custom.rules | sed '/^#/d' >> "${TMPFILE}"
 fi
 
 cat << EOF >> "${TMPFILE}"
